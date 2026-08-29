@@ -154,15 +154,12 @@ import PostTask from "./PostTask";
 import PostSocialFeed from "./PostSocialFeed";
 import logo from "../../assets/rialologo.png";
 import {
-  MdDashboard,
   MdOutlineWorkOutline,
   MdOutlineBookmarkBorder,
   MdAdd,
   MdClose,
 } from "react-icons/md";
-import { FaTasks } from "react-icons/fa";
-import { SlFeed } from "react-icons/sl";
-import { FiBriefcase, FiGrid, FiMessageCircle, FiMessageSquare, FiUser } from "react-icons/fi";
+import { FiBriefcase, FiGrid, FiMessageCircle, FiUser } from "react-icons/fi";
 import { NavLink, Outlet } from "react-router-dom";
 import LogoutButton from "../Auth/Logout";
 

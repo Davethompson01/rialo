@@ -353,6 +353,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   MessageCircle,
+  X,
   ArrowLeft,
   Clock3,
   Loader2,
@@ -364,7 +365,6 @@ import {
   CheckCheck,
   Paperclip,
   Smile,
-  Circle,
   BriefcaseBusiness,
 } from "lucide-react";
 
@@ -779,6 +779,20 @@ export default function MessagingPlatform({
                   </p>
                 </div>
               </div>
+              {error && (
+                <div className="mx-4 mt-4 flex items-center justify-between rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-600">
+                  <span>{error}</span>
+
+                  <button
+                    type="button"
+                    onClick={() => setError("")}
+                    className="ml-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition hover:bg-red-100"
+                    aria-label="Dismiss error"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex items-center gap-2 text-[#0f172a]/60">

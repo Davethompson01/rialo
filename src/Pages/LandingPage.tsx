@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -6,11 +5,9 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
-  ChevronRight,
   MessageCircle,
   Search,
   ShieldCheck,
-  Sparkles,
   Users,
   Zap,
 } from "lucide-react";
