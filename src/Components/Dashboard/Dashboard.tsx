@@ -2,11 +2,20 @@ import MixedFeed from "../Feed/MixedFeed";
 
 const Dashboard = () => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+    <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mb-8">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-black" />
+          <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
+            Your workspace
+          </span>
+        </div>
 
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="mt-3 text-3xl font-black tracking-tight text-gray-950">
+          Dashboard
+        </h1>
+
+        <p className="mt-1 text-sm text-gray-500">
           Discover tasks and community posts.
         </p>
       </div>

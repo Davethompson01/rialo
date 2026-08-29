@@ -13,6 +13,7 @@ import TaskFeeds from "./Components/Task/Task";
 
 import NegotiationChat from "./Components/Message/negotiate";
 import OffersList from "./Components/Message/ListChat";
+import LandingPage from "./Pages/LandingPage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -59,11 +60,13 @@ export default function App() {
     <Routes>
       <Route path="/signup" element={<CreateAccountPage />} />
 
+      <Route path="/" element={<LandingPage />} />
+
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<TaskLayout />}>
         <Route element={<DashboardNav />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/feed" element={<FeedsCard />} />
 

@@ -162,19 +162,20 @@ import {
 } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { SlFeed } from "react-icons/sl";
-import { FiMessageSquare } from "react-icons/fi";
+import { FiBriefcase, FiGrid, FiMessageCircle, FiMessageSquare, FiUser } from "react-icons/fi";
 import { NavLink, Outlet } from "react-router-dom";
+import LogoutButton from "../Auth/Logout";
 
 export const DashboardNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const primaryNavItems = [
-    { label: "Dashboard", Icon: <MdDashboard size={20} />, Link: "/" },
-    { label: "Task", Icon: <FaTasks size={20} />, Link: "/task" },
-    { label: "Feeds", Icon: <SlFeed size={20} />, Link: "/feed" },
+    { label: "Dashboard", Icon: <FiGrid size={20} />, Link: "/dashboard" },
+    { label: "Tasks", Icon: <FiBriefcase size={20} />, Link: "/task" },
+    { label: "Feeds", Icon: <FiUser size={20} />, Link: "/feed" },
     {
-      label: "Negotiate",
-      Icon: <FiMessageSquare size={20} />,
+      label: "Messages",
+      Icon: <FiMessageCircle size={20} />,
       Link: "/negotiate",
     },
   ];
@@ -260,6 +261,9 @@ export const DashboardNav = () => {
         <div className="p-4 border-t border-gray-200/60 space-y-3">
           <PostSocialFeed />
           <PostTask />
+          <div className="border-t border-gray-100 p-4">
+            <LogoutButton />
+          </div>
         </div>
       </aside>
 
@@ -274,6 +278,9 @@ export const DashboardNav = () => {
           <div className="flex flex-col items-end space-y-2 mb-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
             <PostSocialFeed />
             <PostTask />
+            <div className="border-t border-gray-100 p-4">
+              <LogoutButton />
+            </div>
           </div>
         )}
         <button

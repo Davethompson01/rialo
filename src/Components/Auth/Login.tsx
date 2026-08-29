@@ -54,7 +54,7 @@ export const Login = () => {
         setError(result.message);
         return;
       }
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       setError("Something went wrong. Please try again.");
