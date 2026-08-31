@@ -138,7 +138,6 @@ const CreateAccount = () => {
             {" "}
             {loading ? "Creating Account..." : "Create Account"}{" "}
           </button>
-          
         </form>
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?
@@ -162,7 +161,7 @@ const CreateAccount = () => {
         </h2>
 
         <p className="mt-4 text-lg text-text-primary/80">
-          Connect with builders, contributors, and communities on Rialo.
+          Connect with builders, contributors, and communities on Connecto.
         </p>
 
         <div className="space-y-5 mt-10">

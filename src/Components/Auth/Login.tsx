@@ -136,7 +136,7 @@ export const Login = () => {
           </h2>
 
           <p className="mt-4 text-lg text-text-primary/80">
-            Connect with builders, contributors, and communities on Rialo.
+            Connect with builders, contributors, and communities on Connecto.
           </p>
 
           <div className="space-y-5 mt-10">

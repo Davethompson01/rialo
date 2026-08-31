@@ -4,7 +4,7 @@ import type { Offer } from "../../Types/negotiation";
 import type { Message } from "../../Types/negotiation";
 import { acceptOffer } from "../../Servives/negotiationApi";
 import { getConversationMessages } from "../../Servives/negotiationApi";
-import { sendNegotiationMessage } from "../../Servives/negotiationApi";
+import { sendMessage } from "../../Servives/negotiationApi";
 import { rejectOffer } from "../../Servives/negotiationApi";
 import { MessageBubble } from "./message";
 import { useLocation } from "react-router-dom";
@@ -14,18 +14,19 @@ const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 export default function NegotiationChat() {
-  const { conversationId, taskId, otherUserId } = useParams();
+  const { conversationId, taskId } = useParams();
 
   const location = useLocation();
 
   const conversationID = Number(conversationId);
+
 
   const taskID = Number(location.state?.taskId);
   const otherUserID = Number(location.state?.employerId);
 
  ;
   // const applicationID = Number(applicationId);
-   const amount = Number(otherUserId);
+  //  const amount = Number(otherUserId);
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -122,22 +123,28 @@ async function handleSendMessage() {
     console.log("TASK ID:", taskID);
     console.log("OTHER USER:", otherUserID);
     console.log("CONVERSATION:", conversationID);
+    console.log("Application ID", )
 
-    await sendNegotiationMessage({
-      TaskId: taskID,
-      EmployerID: otherUserID,
-      Status: "pending",
-      Content: message.trim(),
+    // await sendNegotiationMessage({
+    //   TaskId: taskID,
+    //   EmployerID: otherUserID,
+    //   Status: "pending",
+    //   Content: message.trim(),
 
-      offer: {
-        task_id: taskID,
-        employer_id: otherUserID,
-        user_id: currentUserId,
-        new_offer: amount,
-        status: "pending",
-      },
-    });
+    //   offer: {
+    //     task_id: taskID,
+    //     employer_id: otherUserID,
+    //     user_id: currentUserId,
+    //     new_offer: amount,
+    //     status: "pending",
+    //   },
+    // });
 
+
+   await sendMessage({
+     conversationID: Number(conversationId),
+     content: message.trim(),
+   });
     setMessage("");
 
     await loadConversation();

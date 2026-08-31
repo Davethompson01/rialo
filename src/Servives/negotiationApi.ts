@@ -35,20 +35,34 @@ export async function getConversationMessages(
 }
 
 
-export async function sendNegotiationMessage(payload: {
-  TaskId: number;
-  EmployerID: number;
-  Status: string;
-  Content: string;
-  offer: {
-    task_id: number;
-    employer_id: number;
-    user_id: number;
-    new_offer: number;
-    status: string;
-  };
+// export async function sendNegotiationMessage(payload: {
+//   TaskId: number;
+//   EmployerID: number;
+//   Status: string;
+//   Content: string;
+//   offer: {
+//     task_id: number;
+//     employer_id: number;
+//     user_id: number;
+//     new_offer: number;
+//     status: string;
+//   };
+// }) {
+//   const response = await fetch(`${API_URL}/conversations/meesage`, {
+//     method: "POST",
+//     credentials: "include",
+//     headers: getHeaders(),
+//     body: JSON.stringify(payload),
+//   });
+
+//   return handleResponse(response);
+// }
+// ```ts
+export async function sendMessage(payload: {
+  conversationID: number;
+  content: string;
 }) {
-  const response = await fetch(`${API_URL}/conversations/negotiate`, {
+  const response = await fetch(`${API_URL}/conversations/message`, {
     method: "POST",
     credentials: "include",
     headers: getHeaders(),
@@ -57,6 +71,8 @@ export async function sendNegotiationMessage(payload: {
 
   return handleResponse(response);
 }
+// ```
+
 
 
 

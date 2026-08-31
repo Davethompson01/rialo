@@ -58,12 +58,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-5 pt-5 md:px-8">
           <nav className="flex items-center justify-between rounded-full border border-black/10 bg-[#e8e3d5]/90 px-4 py-3 backdrop-blur-xl md:px-6">
             <a href="#" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-sm font-black text-[#e8e3d5]">
-                R
-              </div>
+              
 
               <span className="text-lg font-black tracking-tight">
-                rialo<span className="font-medium">hub</span>
+                Connecto<span className="font-medium"></span>
               </span>
             </a>
 
@@ -127,7 +125,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="mx-auto mt-8 max-w-2xl text-base leading-7 text-black/55 md:text-lg">
-              Rialo Hub brings contributors, employers, opportunities, and
+              Connecto brings contributors, employers, opportunities, and
               communities together. Discover work, apply, negotiate, and build
               your reputation in one place.
             </p>
@@ -159,7 +157,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="hidden rounded-full bg-black/[0.04] px-5 py-1.5 text-[10px] text-black/35 sm:block">
-                  rialohub.com
+                  Connecto
                 </div>
 
                 <div className="w-8" />
@@ -169,7 +167,7 @@ export default function LandingPage() {
                 {/* sidebar */}
                 <aside className="hidden border-r border-black/10 p-5 md:block">
                   <div className="mb-10 text-sm font-black">
-                    rialo<span className="font-normal">hub</span>
+                    Connecto<span className="font-normal">hub</span>
                   </div>
 
                   <div className="space-y-2 text-xs">
@@ -327,8 +325,8 @@ export default function LandingPage() {
 
               <p className="mt-7 max-w-2xl text-lg leading-8 text-black/50">
                 Finding opportunities shouldn't mean jumping between job boards,
-                DMs, spreadsheets, and payment conversations. Rialo Hub puts the
-                entire contributor journey in one simple experience.
+                DMs, spreadsheets, and payment conversations. Connecto Hub puts
+                the entire contributor journey in one simple experience.
               </p>
             </div>
           </div>
@@ -404,7 +402,7 @@ export default function LandingPage() {
               </h2>
 
               <p className="mt-7 max-w-lg text-base leading-7 text-black/50">
-                Sometimes the posted price isn't right. Rialo Hub lets
+                Sometimes the posted price isn't right. Connecto lets
                 contributors and employers have the conversation, send offers,
                 counter offers, and find terms that work for both sides.
               </p>
@@ -586,8 +584,6 @@ export default function LandingPage() {
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.05]" />
 
             <div className="relative">
-              
-
               <h2 className="mx-auto mt-7 max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.045em] md:text-7xl">
                 Your next opportunity is already out there.
               </h2>
@@ -603,7 +599,7 @@ export default function LandingPage() {
                 }}
                 className="group mt-9 inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition-transform hover:-translate-y-0.5"
               >
-                Enter Rialo Hub
+                Enter Connecto
                 <ArrowRight
                   size={17}
                   className="transition-transform group-hover:translate-x-1"
@@ -622,7 +618,7 @@ export default function LandingPage() {
               R
             </div>
             <span className="text-sm font-black">
-              rialo<span className="font-normal">hub</span>
+              Connecto<span className="font-normal"></span>
             </span>
           </div>
 
@@ -641,7 +637,7 @@ export default function LandingPage() {
             </a>
           </div>
 
-          <div className="text-xs text-black/35">© 2026 Rialo Hub</div>
+          <div className="text-xs text-black/35">© 2026 Connecto</div>
         </div>
       </footer>
     </div>
