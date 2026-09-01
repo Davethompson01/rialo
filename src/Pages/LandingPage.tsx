@@ -58,8 +58,6 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-5 pt-5 md:px-8">
           <nav className="flex items-center justify-between rounded-full border border-black/10 bg-[#e8e3d5]/90 px-4 py-3 backdrop-blur-xl md:px-6">
             <a href="#" className="flex items-center gap-2">
-              
-
               <span className="text-lg font-black tracking-tight">
                 Connecto<span className="font-medium"></span>
               </span>
@@ -98,7 +96,12 @@ export default function LandingPage() {
                 Sign in
               </button>
 
-              <button className="rounded-full bg-black px-5 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.03]">
+              <button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                className="rounded-full bg-black px-5 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.03]"
+              >
                 Join the Hub
               </button>
             </div>
