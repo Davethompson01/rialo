@@ -134,7 +134,12 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-              <button className="group flex items-center justify-center gap-3 rounded-full bg-black px-7 py-4 text-sm font-bold text-white transition-all hover:-translate-y-0.5">
+              <button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                className="group flex items-center justify-center gap-3 rounded-full bg-black px-7 py-4 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+              >
                 Explore opportunities
                 <ArrowRight
                   size={17}
