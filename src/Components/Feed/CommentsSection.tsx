@@ -11,10 +11,15 @@ type Props = {
 
 const CommentsSection = ({ postID, onCommentCreated }: Props) => {
   const [comments, setComments] = useState<CommentResponse[]>([]);
+  // const [openComments, setOpenComments] = useState<number | null>(null);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // const handleComment = (postId: number) => {
+  //   setOpenComments((current) => (current === postId ? null : postId));
+  // };
 
   const loadComments = async () => {
     try {

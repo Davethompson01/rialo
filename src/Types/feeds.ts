@@ -41,6 +41,20 @@
 //   updated_at: string;
 // };
 
+// export type MixedFeedPost = {
+//   id: number;
+//   type: "post";
+//   user_id: number;
+//   username: string;
+//   profile_pics?: string;
+//   title: string;
+//   description: string;
+//   likes: number;
+//   comments: number;
+//   is_liked: boolean;
+//   created_at: string;
+// };
+
 export type FeedPost = {
   id: number;
   type: "post";

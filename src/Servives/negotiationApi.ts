@@ -77,25 +77,26 @@ export async function sendMessage(payload: {
 
 
 export async function acceptOffer(payload: OfferActionRequest) {
-  const response = await fetch(`${API_URL}/offer/accept`, {
+  const response = await fetch(`${API_URL}/offers/accept`, {
     method: "POST",
     credentials: "include",
     headers: getHeaders(),
     body: JSON.stringify(payload),
   });
-
+  console.log(payload);
   return handleResponse(response);
 }
 
 
 export async function rejectOffer(payload: OfferActionRequest) {
-  const response = await fetch(`${API_URL}/offer/reject`, {
+  const response = await fetch(`${API_URL}/offers/reject`, {
     method: "POST",
     credentials: "include",
     headers: getHeaders(),
     body: JSON.stringify(payload),
   });
 
+  console.log(payload)
   return handleResponse(response);
 }
 
@@ -126,4 +127,20 @@ export async function getMyOffers(): Promise<Offer[]> {
 }
 
 
+
+export async function createOffer(payload: {
+  task_id: number;
+  application_id: number;
+  conversation_id: number;
+  amount: number;
+}) {
+  const response = await fetch(`${API_URL}/offers/create`, {
+    method: "POST",
+    credentials: "include",
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  return handleResponse(response);
+}
 

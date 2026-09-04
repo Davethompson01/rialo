@@ -1,201 +1,7 @@
-// import {
-//   FaClock,
-//   FaUsers,
-//   FaArrowRight,
-//   FaBriefcase,
-//   FaEllipsisH,
-// } from "react-icons/fa";
 
-// import type { FeedTask } from "../../Types/feeds";
-
-// type Props = {
-//   task: FeedTask;
-//   onApply: (taskId: number) => void;
-// };
-
-// const TaskCard = ({ task, onApply }: Props) => {
-//   const initials = task.username?.slice(0, 2).toUpperCase() || "US";
-
-//   const deadline = new Date(task.deadline);
-
-//   const formattedDeadline = deadline.toLocaleDateString(undefined, {
-//     month: "short",
-//     day: "numeric",
-//     year: "numeric",
-//   });
-
-//   const isExpired = deadline.getTime() < Date.now();
-
-//   const status = task.status?.toLowerCase();
-
-//   const statusStyles =
-//     status === "ongoing"
-//       ? "bg-amber-50 text-amber-700 border-amber-100"
-//       : status === "completed"
-//         ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-//         : status === "cancelled"
-//           ? "bg-red-50 text-red-600 border-red-100"
-//           : "bg-gray-100 text-gray-600 border-gray-200";
-
-//   return (
-//     <article className="group overflow-hidden rounded-3xl border border-gray-200/80 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition duration-300 hover:-translate-y-[1px] hover:shadow-[0_10px_35px_rgba(0,0,0,0.07)]">
-//       {/* Opportunity accent */}
-//       <div className="h-1 w-full bg-gray-900" />
-
-//       <div className="p-5 sm:p-6">
-//         {/* Header */}
-//         <div className="flex items-start justify-between gap-4">
-//           <div className="flex min-w-0 items-center gap-3">
-//             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-dark text-sm font-bold text-white shadow-sm">
-//               {initials}
-//             </div>
-
-//             <div className="min-w-0">
-//               <div className="flex items-center gap-2">
-//                 <p className="truncate text-sm font-bold text-gray-950">
-//                   {task.username}
-//                 </p>
-
-//                 <span className="hidden rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500 sm:inline-flex">
-//                   Task
-//                 </span>
-//               </div>
-
-//               <div className="mt-1 flex items-center gap-1.5 text-xs text-gray-400">
-//                 <FaBriefcase size={10} />
-
-//                 <span className="truncate">{task.role}</span>
-//               </div>
-//             </div>
-//           </div>
-
-//           <div className="flex shrink-0 items-center gap-2">
-//             <span
-//               className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${statusStyles}`}
-//             >
-//               {task.status}
-//             </span>
-
-//             <button
-//               type="button"
-//               className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
-//             >
-//               <FaEllipsisH size={13} />
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Task content */}
-//         <div className="mt-6">
-//           <h2 className="text-xl font-black leading-tight tracking-tight text-gray-950">
-//             {task.title}
-//           </h2>
-
-//           <p className="mt-3 line-clamp-3 text-[14px] leading-7 text-gray-600">
-//             {task.description}
-//           </p>
-//         </div>
-
-//         {/* Reward + Applicants */}
-//         <div className="mt-6 grid grid-cols-2 gap-3">
-//           <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-//             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400">
-//               Reward
-//             </p>
-
-//             <div className="mt-2 flex items-baseline gap-1.5">
-//               <span className="text-xl font-black text-gray-950">
-//                 {task.reward}
-//               </span>
-
-//               <span className="text-xs font-semibold text-gray-400">USDC</span>
-//             </div>
-//           </div>
-
-//           <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-//             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400">
-//               Applicants
-//             </p>
-
-//             <div className="mt-2 flex items-center gap-2">
-//               <FaUsers className="text-gray-400" size={14} />
-
-//               <span className="text-xl font-black text-gray-950">
-//                 {task.applicant_count}
-//               </span>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Deadline */}
-//         <div
-//           className={`mt-4 flex items-center justify-between rounded-2xl border px-4 py-3 ${
-//             isExpired ? "border-red-100 bg-red-50" : "border-gray-100 bg-white"
-//           }`}
-//         >
-//           <div className="flex items-center gap-2.5">
-//             <div
-//               className={`flex h-8 w-8 items-center justify-center rounded-full ${
-//                 isExpired ? "bg-red-100" : "bg-gray-100"
-//               }`}
-//             >
-//               <FaClock
-//                 size={12}
-//                 className={isExpired ? "text-red-500" : "text-gray-500"}
-//               />
-//             </div>
-
-//             <div>
-//               <p className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
-//                 Deadline
-//               </p>
-
-//               <p
-//                 className={`mt-0.5 text-xs font-semibold ${
-//                   isExpired ? "text-red-600" : "text-gray-700"
-//                 }`}
-//               >
-//                 {isExpired ? "Expired" : formattedDeadline}
-//               </p>
-//             </div>
-//           </div>
-
-//           {!isExpired && (
-//             <span className="text-[10px] font-medium text-gray-400">
-//               Apply before deadline
-//             </span>
-//           )}
-//         </div>
-
-//         {/* Action */}
-//         <button
-//           type="button"
-//           disabled={isExpired}
-//           onClick={() => onApply(task.id)}
-//           className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-dark py-3.5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
-//         >
-//           {isExpired ? (
-//             "Task Expired"
-//           ) : (
-//             <>
-//               Apply for Task
-//               <FaArrowRight
-//                 size={12}
-//                 className="transition-transform group-hover:translate-x-1"
-//               />
-//             </>
-//           )}
-//         </button>
-//       </div>
-//     </article>
-//   );
-// };
-
-// export default TaskCard;
 
 import { useEffect, useState } from "react";
 import {
-  FaClock,
   FaUsers,
   FaArrowRight,
   FaBriefcase,
@@ -209,6 +15,7 @@ import {
   FaStar,
   FaSpinner,
 } from "react-icons/fa";
+import {  useNavigate } from "react-router-dom";
 
 import type { FeedTask } from "../../Types/feeds";
 
@@ -249,6 +56,8 @@ const TaskCard = ({ task, onApply }: Props) => {
   const [actionLoading, setActionLoading] = useState<number | null>(null);
 
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   /*
   |--------------------------------------------------------------------------
@@ -634,11 +443,8 @@ const TaskCard = ({ task, onApply }: Props) => {
 
   const deadline = new Date(task.deadline);
 
-  const formattedDeadline = deadline.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  
+  
 
   const isExpired = deadline.getTime() < Date.now();
 
@@ -723,80 +529,7 @@ const TaskCard = ({ task, onApply }: Props) => {
             </p>
           </div>
 
-          {/* Reward / Applicants */}
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400">
-                Reward
-              </p>
-
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-xl font-black text-gray-950">
-                  {task.reward}
-                </span>
-
-                <span className="text-xs font-semibold text-gray-400">
-                  USDC
-                </span>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-400">
-                Applicants
-              </p>
-
-              <div className="mt-2 flex items-center gap-2">
-                <FaUsers className="text-gray-400" size={14} />
-
-                <span className="text-xl font-black text-gray-950">
-                  {task.applicant_count}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Deadline */}
-          <div
-            className={`mt-4 flex items-center justify-between rounded-2xl border px-4 py-3 ${
-              isExpired
-                ? "border-red-100 bg-red-50"
-                : "border-gray-100 bg-white"
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                  isExpired ? "bg-red-100" : "bg-gray-100"
-                }`}
-              >
-                <FaClock
-                  size={12}
-                  className={isExpired ? "text-red-500" : "text-gray-500"}
-                />
-              </div>
-
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
-                  Deadline
-                </p>
-
-                <p
-                  className={`mt-0.5 text-xs font-semibold ${
-                    isExpired ? "text-red-600" : "text-gray-700"
-                  }`}
-                >
-                  {isExpired ? "Expired" : formattedDeadline}
-                </p>
-              </div>
-            </div>
-
-            {!isExpired && (
-              <span className="text-[10px] font-medium text-gray-400">
-                Apply before deadline
-              </span>
-            )}
-          </div>
+          
 
           {/* Error */}
           {error && (
@@ -936,21 +669,29 @@ const TaskCard = ({ task, onApply }: Props) => {
                         className="flex items-center justify-between gap-3 rounded-xl border border-black/8 bg-black/[0.02] p-3 transition hover:bg-gray-50"
                       >
                         {/* Applicant */}
-                        <div className="flex min-w-0 items-center gap-3">
+                        {/* Applicant */}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigate(`/profile?userId=${app.ID}`)
+                            
+                          }
+                          className="flex min-w-0 items-center gap-3 text-left group"
+                        >
                           {app.Avatar ? (
                             <img
                               src={app.Avatar}
                               alt={app.Username}
-                              className="h-9 w-9 shrink-0 rounded-full object-cover"
+                              className="h-9 w-9 shrink-0 rounded-full object-cover transition group-hover:ring-2 group-hover:ring-black/10"
                             />
                           ) : (
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-black">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-black transition group-hover:bg-black group-hover:text-white">
                               {app.Username?.charAt(0).toUpperCase() || "A"}
                             </div>
                           )}
 
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-bold text-black">
+                            <p className="truncate text-sm font-bold text-black transition group-hover:underline">
                               {app.Username}
                             </p>
 
@@ -964,7 +705,7 @@ const TaskCard = ({ task, onApply }: Props) => {
                               <span>reputation</span>
                             </div>
                           </div>
-                        </div>
+                        </button>
 
                         {/* Application status/actions */}
                         <div className="flex shrink-0 items-center gap-2">

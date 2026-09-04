@@ -216,7 +216,11 @@ export default function LandingPage() {
                   <div className="flex items-end justify-between">
                     <div>
                       <div className="text-xs font-medium text-black/40">
-                        Tuesday, August 29
+                        {new Date().toLocaleDateString("en-US", {
+                          weekday: "long",
+                          month: "long",
+                          day: "numeric",
+                        })}
                       </div>
                       <h3 className="mt-1 text-2xl font-black tracking-tight md:text-3xl">
                         Find your next opportunity.

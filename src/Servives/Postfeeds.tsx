@@ -86,6 +86,7 @@ export const getPostComments = async (
   });
 
   const data = await response.json();
+  console.log(data);
 
   if (!response.ok || !data.success) {
     throw new Error(data.message || "Failed to load comments");

@@ -219,7 +219,7 @@ const PostTask = () => {
             >
               <option value="">Select a category</option>
               <option value="Developer">Developer</option>
-              <option value="Designer">Designer</option>
+              <option value="Designer">Graphic Designer</option>
               <option value="Writer">Writer</option>
               <option value="Moderators">Moderators</option>
               <option value="Artist">Artist</option>

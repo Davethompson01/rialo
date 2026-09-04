@@ -18,8 +18,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
 type FeedTask = {
   id: number;
   userId: number;
@@ -49,11 +47,6 @@ type Application = {
   Status: string;
 };
 
-
-
-
-
-
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -62,6 +55,9 @@ const TaskFeeds = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
+  const [negotiationTask, setNegotiationTask] = useState<FeedTask | null>(null);
+  const [offerAmount, setOfferAmount] = useState("");
+  const [showNegotiationModal, setShowNegotiationModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -115,7 +111,7 @@ const TaskFeeds = () => {
     if (!response.ok || !result.success) {
       throw new Error(result.message || "Unable to fetch tasks");
     }
-    console.log(result)
+    console.log(result);
 
     const formattedTasks: FeedTask[] = result.data.map((task: any) => ({
       id: task.id,
@@ -134,7 +130,7 @@ const TaskFeeds = () => {
       applicationID: task.ApplicationID,
     }));
 
-    console.log(formattedTasks, "formatted text")
+    console.log(formattedTasks, "formatted text");
 
     setTasks(formattedTasks);
 
@@ -180,7 +176,7 @@ const TaskFeeds = () => {
     ApplicationID: number;
     Status: string;
     Content: string;
-    offer: { task_id: number; new_offer: number; status: string };
+    Offer: { task_id: number; NewOffer: number; status: string };
   }) {
     const response = await fetch(
       `${API_URL}/conversations/negotiateapplicant`,
@@ -195,51 +191,105 @@ const TaskFeeds = () => {
     return handleResponse(response);
   }
 
-// ```ts
-const handleNegotiate = async (task: FeedTask) => {
-  try {
-    setActionLoading(task.id);
-    setError("");
+  // ```ts
+  // const handleNegotiate = async (task: FeedTask) => {
+  //   try {
+  //     setActionLoading(task.id);
+  //     setError("");
 
-    console.log("Task ID:", task.id);
-    console.log("Application ID:", task.applicationID);
-    console.log("Is Applied:", task.isApplied);
+  //     console.log("Task ID:", task.id);
+  //     console.log("Application ID:", task.applicationID);
+  //     console.log("Is Applied:", task.isApplied);
 
+  //     if (!task.isApplied || !task.applicationID) {
+  //       throw new Error("You must apply to this task before negotiating");
+  //     }
+
+  //     const result = await createNegotiation({
+  //       TaskId: task.id,
+  //       ApplicationID: task.applicationID,
+  //       Content: "I'd like to discuss this task.",
+  //       Status: "pending",
+  //       offer: {
+  //         task_id: task.id,
+  //         new_offer: task.reward,
+  //         status: "pending",
+  //       },
+  //     });
+
+  //     const conversationId = result.data?.conversation_id;
+
+  //     if (!conversationId) {
+  //       throw new Error("No conversation ID returned");
+  //     }
+
+  //     navigate(`/negotiate/${conversationId}`, {
+  //       state: {
+  //         taskId: task.id,
+  //         employerId: task.employerId,
+  //       },
+  //     });
+  //   } catch (error: any) {
+  //     console.error("Negotiation error:", error);
+  //     setError(error.message || "Failed to start negotiation");
+  //   } finally {
+  //     setActionLoading(null);
+  //   }
+  // };
+
+  const handleNegotiate = (task: FeedTask) => {
     if (!task.isApplied || !task.applicationID) {
-      throw new Error("You must apply to this task before negotiating");
+      setError("You must apply to this task before negotiating");
+      return;
     }
 
-    const result = await createNegotiation({
-      TaskId: task.id,
-      ApplicationID: task.applicationID,
-      Content: "I'd like to discuss this task.",
-      Status: "pending",
-      offer: {
-        task_id: task.id,
-        new_offer: task.reward,
-        status: "pending",
-      },
-    });
+    setNegotiationTask(task);
+    setOfferAmount(String(task.reward));
+    setShowNegotiationModal(true);
+  };
 
-    const conversationId = result.data?.conversation_id;
+  const handleCreateNegotiation = async () => {
+    if (!negotiationTask) return;
 
-    if (!conversationId) {
-      throw new Error("No conversation ID returned");
+    const amount = Number(offerAmount);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setError("Please enter a valid RIALO amount");
+      return;
     }
 
-    navigate(`/negotiate/${conversationId}`, {
-      state: {
-        taskId: task.id,
-        employerId: task.employerId,
-      },
-    });
-  } catch (error: any) {
-    console.error("Negotiation error:", error);
-    setError(error.message || "Failed to start negotiation");
-  } finally {
-    setActionLoading(null);
-  }
-};
+    try {
+      setActionLoading(negotiationTask.id);
+      setError("");
+
+      const result = await createNegotiation({
+        TaskId: negotiationTask.id,
+        ApplicationID: negotiationTask.applicationID!,
+        Content: "I'd like to discuss this task.",
+        Status: "pending",
+        Offer: {
+          task_id: negotiationTask.id,
+          NewOffer: amount,
+          status: "pending",
+        },
+      });
+
+      const conversationId = result.data?.conversation_id;
+
+      if (!conversationId) {
+        throw new Error("No conversation ID returned");
+      }
+
+      setShowNegotiationModal(false);
+
+      navigate("/negotiate");
+    } catch (error: any) {
+      console.error("Negotiation error:", error);
+      setError(error.message || "Failed to start negotiation");
+    } finally {
+      setActionLoading(null);
+    }
+  };
   useEffect(() => {
     loadFeed();
   }, []);
@@ -878,30 +928,140 @@ const handleNegotiate = async (task: FeedTask) => {
                         disabled={isLoading}
                         onClick={() => handleNegotiate(task)}
                         className="
-        flex
-        w-full
-        cursor-pointer
-        items-center
-        justify-center
-        gap-2
-        rounded-xl
-        border
-        border-black/10
-        bg-[#e8e3d5]
-        px-4
-        py-2.5
-        text-xs
-        font-bold
-        text-black
-        transition
-        hover:bg-[#ded8c8]
-        disabled:cursor-not-allowed
-        disabled:opacity-50
-      "
+    flex
+    w-full
+    cursor-pointer
+    items-center
+    justify-center
+    gap-2
+    rounded-xl
+    border
+    border-black/10
+    bg-[#e8e3d5]
+    px-4
+    py-2.5
+    text-xs
+    font-bold
+    text-black
+    transition
+    hover:bg-[#ded8c8]
+    disabled:cursor-not-allowed
+    disabled:opacity-50
+"
                       >
                         <MessageCircle className="h-3.5 w-3.5" />
                         Negotiate
                       </button>
+
+                      {/* Modal must be OUTSIDE the button */}
+                      {showNegotiationModal && negotiationTask && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+                            <div className="mb-6">
+                              <p className="text-xs font-bold uppercase tracking-wider text-black/40">
+                                Start Negotiation
+                              </p>
+
+                              <h2 className="mt-1 text-xl font-bold text-[#0f172a]">
+                                Make an offer
+                              </h2>
+
+                              <p className="mt-2 text-sm text-black/50">
+                                Choose how much RIALO you'd like to offer for
+                                this task.
+                              </p>
+                            </div>
+
+                            {/* Task reward */}
+                            <div className="mb-5 rounded-2xl bg-[#e8e3d5]/50 p-4">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-medium text-black/50">
+                                  Task reward
+                                </span>
+
+                                <span className="font-bold text-[#0f172a]">
+                                  {negotiationTask.reward} RIALO
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Amount */}
+                            <div>
+                              <label className="mb-2 block text-xs font-bold text-[#0f172a]">
+                                Your offer
+                              </label>
+
+                              <div className="relative">
+                                <input
+                                  type="number"
+                                  value={offerAmount}
+                                  onChange={(e) =>
+                                    setOfferAmount(e.target.value)
+                                  }
+                                  placeholder="Enter amount"
+                                  min="1"
+                                  className="w-full rounded-2xl border border-black/10 px-4 py-4 pr-20 text-lg font-bold outline-none transition focus:border-[#6366f1]"
+                                />
+
+                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-black/40">
+                                  RIALO
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Quick amounts */}
+                            <div className="mt-3 flex gap-2">
+                              {[0.8, 0.9, 1].map((multiplier) => {
+                                const amount = Math.round(
+                                  negotiationTask.reward * multiplier,
+                                );
+
+                                return (
+                                  <button
+                                    key={multiplier}
+                                    type="button"
+                                    onClick={() =>
+                                      setOfferAmount(String(amount))
+                                    }
+                                    className="rounded-xl border border-black/10 px-3 py-2 text-xs font-bold hover:bg-black/5"
+                                  >
+                                    {amount} RIALO
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {/* Actions */}
+                            <div className="mt-6 flex gap-3">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setShowNegotiationModal(false);
+                                  setOfferAmount("");
+                                }}
+                                className="flex-1 rounded-2xl border border-black/10 px-4 py-3 text-sm font-bold"
+                              >
+                                Cancel
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={handleCreateNegotiation}
+                                disabled={
+                                  !offerAmount ||
+                                  Number(offerAmount) <= 0 ||
+                                  actionLoading === negotiationTask.id
+                                }
+                                className="flex-1 rounded-2xl bg-[#0f172a] px-4 py-3 text-sm font-bold text-white disabled:opacity-50"
+                              >
+                                {actionLoading === negotiationTask.id
+                                  ? "Creating..."
+                                  : "Create Offer"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>

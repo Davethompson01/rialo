@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { Offer } from "../../Types/negotiation";
 import type { Message } from "../../Types/negotiation";
@@ -7,85 +7,78 @@ import { getConversationMessages } from "../../Servives/negotiationApi";
 import { sendMessage } from "../../Servives/negotiationApi";
 import { rejectOffer } from "../../Servives/negotiationApi";
 import { MessageBubble } from "./message";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { OfferCard } from "./offercard";
+import { getApplicantOffers, getMyOffers } from "../../Servives/negotiationApi";
 
-const API_URL = import.meta.env.VITE_API_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
+// const API_URL = import.meta.env.VITE_API_URL;
 
-export default function NegotiationChat() {
-  const { conversationId, taskId } = useParams();
+type NegotiationChatProps = {
+  conversation: {
+    conversation_id: number;
+    task_id: number;
+    employer_id: number;
+    applicant_id: number;
+    username: string;
+    avatar: string;
+    isOnline?: boolean;
+    offers: Offer[];
+  };
+  currentUserId: number;
+};
 
-  const location = useLocation();
 
-  const conversationID = Number(conversationId);
-
-
-  const taskID = Number(location.state?.taskId);
-  const otherUserID = Number(location.state?.employerId);
-
- ;
-  // const applicationID = Number(applicationId);
-  //  const amount = Number(otherUserId);
+export default function NegotiationChat({
+  conversation,
+  currentUserId,
+}: NegotiationChatProps) {
+  const conversationID = Number(conversation.conversation_id);
+  const taskID = Number(conversation.task_id);
 
   const [messages, setMessages] = useState<Message[]>([]);
-
   const [offers, setOffers] = useState<Offer[]>([]);
-
   const [message, setMessage] = useState("");
-
   const [loading, setLoading] = useState(true);
-
   const [sending, setSending] = useState(false);
 
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-
-  const getHeaders = () => ({
-    "Content-Type": "application/json",
-    "x-api-key": API_KEY,
-  });
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const response = await fetch(`${API_URL}/auth/me`, {
-        method: "GET",
-        credentials: "include",
-        headers: getHeaders(),
-      });
-
-      const text = await response.text();
-
-      let result;
-
-      try {
-        result = JSON.parse(text);
-      } catch {
-        throw new Error(text || "Invalid server response");
-      }
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Unable to get current user");
-      }
-
-      setCurrentUserId(result.data.id);
-
-      return result.data.id;
-    };
-
-    fetchCurrentUser();
-  }, []);
+  // const getHeaders = () => ({
+  //   "Content-Type": "application/json",
+  //   "x-api-key": API_KEY,
+  // });
 
   useEffect(() => {
     loadConversation();
-  }, [conversationId]);
+  }, [conversationID]);
 
   async function loadConversation() {
     try {
       setLoading(true);
 
-      const data = await getConversationMessages(conversationID);
+      // Load messages
+      const messagesData = await getConversationMessages(conversationID);
 
-      setMessages(data);
+      setMessages(messagesData);
+
+      // Load offers
+      const [applicantOffers, myOffers] = await Promise.all([
+        getApplicantOffers(),
+        getMyOffers(),
+      ]);
+
+      const allOffers = [...applicantOffers, ...myOffers];
+
+      const conversationOffers = allOffers.filter(
+        (offer) => Number(offer.conversation_id) === conversationID,
+      );
+
+      // Remove duplicates
+      const uniqueOffers = Array.from(
+        new Map(
+          conversationOffers.map((offer) => [offer.offer_id, offer]),
+        ).values(),
+      );
+
+      setOffers(uniqueOffers);
     } catch (error) {
       console.error("Failed to load conversation:", error);
     } finally {
@@ -93,67 +86,26 @@ export default function NegotiationChat() {
     }
   }
 
-async function handleSendMessage() {
-  if (!message.trim() || sending) {
-    return;
+  async function handleSendMessage() {
+    if (!message.trim() || sending) return;
+
+    try {
+      setSending(true);
+
+      await sendMessage({
+        conversationID,
+        content: message.trim(),
+      });
+
+      setMessage("");
+
+      await loadConversation();
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    } finally {
+      setSending(false);
+    }
   }
-
-  if (!Number.isFinite(taskID)) {
-    console.error("Invalid taskID:", taskID);
-    return;
-  }
-
-  if (!Number.isFinite(otherUserID)) {
-    console.error("Invalid otherUserID:", otherUserID);
-    return;
-  }
-
-  if (!Number.isFinite(currentUserId)) {
-    console.error("Invalid currentUserID:", currentUserId);
-    return;
-  }
-  if (currentUserId === null) {
-    console.error("Invalid currentUserId:", currentUserId);
-    return;
-  }
-
-  try {
-    setSending(true);
-    // console.log("PARAMS:", params);
-    console.log("TASK ID:", taskID);
-    console.log("OTHER USER:", otherUserID);
-    console.log("CONVERSATION:", conversationID);
-    console.log("Application ID", )
-
-    // await sendNegotiationMessage({
-    //   TaskId: taskID,
-    //   EmployerID: otherUserID,
-    //   Status: "pending",
-    //   Content: message.trim(),
-
-    //   offer: {
-    //     task_id: taskID,
-    //     employer_id: otherUserID,
-    //     user_id: currentUserId,
-    //     new_offer: amount,
-    //     status: "pending",
-    //   },
-    // });
-
-
-   await sendMessage({
-     conversationID: Number(conversationId),
-     content: message.trim(),
-   });
-    setMessage("");
-
-    await loadConversation();
-  } catch (error) {
-    console.error("Failed to send message:", error);
-  } finally {
-    setSending(false);
-  }
-}
 
   async function handleAccept(offer: Offer) {
     try {
@@ -180,6 +132,7 @@ async function handleSendMessage() {
   }
 
   async function handleReject(offer: Offer) {
+    // console.log()
     try {
       await rejectOffer({
         application_id: offer.application_id,
@@ -187,6 +140,7 @@ async function handleSendMessage() {
         offer_id: offer.offer_id,
         conversation_id: offer.conversation_id,
       });
+      // console
 
       setOffers((previous) =>
         previous.map((item) =>
@@ -204,41 +158,48 @@ async function handleSendMessage() {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
+    {/* <div className="flex h-full flex-col"> */}
       {/* Header */}
       <div className="border-b p-4">
         <h2 className="font-semibold">Negotiation</h2>
 
-        <p className="text-xs text-gray-500">Task #{taskId}</p>
+        <p className="text-xs text-gray-500">Task #{taskID}</p>
       </div>
 
-      {/* Messages */}
+      {/* Messages + Offers */}
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
         {loading ? (
           <div className="text-center text-sm text-gray-500">
             Loading conversation...
           </div>
         ) : (
-          currentUserId !== null &&
-          messages.map((message) => (
-            <MessageBubble
-              key={message.message_id}
-              message={message}
-              currentUserId={currentUserId}
-            />
-          ))
-        )}
+          <>
+            {messages.map((message) => (
+              <MessageBubble
+                key={message.message_id}
+                message={message}
+                currentUserId={currentUserId}
+              />
+            ))}
 
-        {currentUserId !== null &&
-          offers.map((offer) => (
-            <OfferCard
-              key={offer.offer_id}
-              offer={offer}
-              currentUserId={currentUserId}
-              onAccept={handleAccept}
-              onReject={handleReject}
-            />
-          ))}
+            {offers.map((offer) => (
+              <OfferCard
+                key={offer.offer_id}
+                offer={offer}
+                currentUserId={currentUserId}
+                onAccept={handleAccept}
+                onReject={handleReject}
+              />
+            ))}
+
+            {messages.length === 0 && offers.length === 0 && (
+              <div className="text-center text-sm text-gray-400">
+                No messages or offers yet.
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Composer */}
@@ -257,7 +218,7 @@ async function handleSendMessage() {
             disabled={sending || !message.trim()}
             className="rounded-xl bg-black px-5 py-3 text-white disabled:opacity-50"
           >
-            Send
+            {sending ? "Sending..." : "Send"}
           </button>
         </div>
       </div>
